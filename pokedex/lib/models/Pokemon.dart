@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 class Pokemons {
   List<Pokemon> pokemons = new List();
 
@@ -30,26 +32,27 @@ class Pokemon {
   List<String> weaknesses;
   List<Evolution> nextEvolution;
   List<Evolution> prevEvolution;
+  Color color;
 
-  Pokemon({
-    this.id,
-    this.num,
-    this.name,
-    this.img,
-    this.type,
-    this.height,
-    this.weight,
-    this.candy,
-    this.candyCount,
-    this.egg,
-    this.spawnChance,
-    this.avgSpawns,
-    this.spawnTime,
-    this.multipliers,
-    this.weaknesses,
-    this.nextEvolution,
-    this.prevEvolution,
-  });
+  Pokemon(
+      {this.id,
+      this.num,
+      this.name,
+      this.img,
+      this.type,
+      this.height,
+      this.weight,
+      this.candy,
+      this.candyCount,
+      this.egg,
+      this.spawnChance,
+      this.avgSpawns,
+      this.spawnTime,
+      this.multipliers,
+      this.weaknesses,
+      this.nextEvolution,
+      this.prevEvolution,
+      this.color});
   Pokemon.fromMapJson(Map<String, dynamic> json) {
     id = json['id'];
     num = json['num'];
@@ -78,6 +81,13 @@ class Pokemon {
       json['prev_evolution'].forEach((v) {
         prevEvolution.add(new Evolution.fromJson(v));
       });
+    }
+    switch (json['type']) {
+      case 'Grass':
+        this.color = Color(0xFFFFF);
+
+        break;
+      default:
     }
   }
 }
