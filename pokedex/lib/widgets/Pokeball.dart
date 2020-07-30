@@ -7,49 +7,100 @@ class PokeBall extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        padding: EdgeInsets.all(10.0),
+    return GridView.builder(
+        physics: BouncingScrollPhysics(),
+        padding: EdgeInsets.all(12),
+        addAutomaticKeepAlives: true,
         itemCount: pokemons.length,
+        gridDelegate:
+            new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (BuildContext context, int index) {
           return Container(
-              height: 200.0,
-              width: 200.0,
               child: Card(
-                color: /*Color.fromRGBO(73, 208, 176, 20)*/ Color(0xFFEF5350),
-                elevation: 10.0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
+            color: pokemons[index].color,
+            elevation: 10.0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            child: Row(
+              children: <Widget>[
+                SizedBox(
+                  width: 5.0,
                 ),
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.only(left: 20.0),
-                      width: 200.0,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(pokemons[index].name,
-                              style: TextStyle(
-                                  fontSize: 30.0,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold)),
-                          SizedBox(height: 20.0),
-                          Text(pokemons[index].name),
-                          SizedBox(height: 10.0),
-                          Text(pokemons[index].name)
-                        ],
-                      ),
-                    ),
-                    FadeInImage.assetNetwork(
+                Container(
+                  width: 80.0,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Text(pokemons[index].name,
+                          style: TextStyle(
+                              fontSize: 15.0,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold)),
+                      SizedBox(height: 12.0),
+                      _setTypes(pokemons[index].type)
+                    ],
+                  ),
+                ),
+                Stack(children: <Widget>[
+                  Opacity(
+                      opacity: 0.2,
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: Image.asset('assets/img/pokeball.png',
+                            height: 120, width: 100),
+                      )),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: FadeInImage.assetNetwork(
                       placeholder: 'assets/img/no-image.jpg',
                       image: pokemons[index].img,
-                      height: 220.0,
-                      width: 150.0,
+                      height: 120,
+                      width: 100,
                       fit: BoxFit.contain,
-                    )
-                  ],
-                ),
-              ));
+                    ),
+                  ),
+                ]),
+              ],
+            ),
+          ));
         });
+  }
+
+  Widget _setTypes(List<String> types) {
+    List<Widget> lista = [];
+    types.forEach((nome) {
+      lista.add(
+        Column(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.all(0),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Color.fromARGB(80, 255, 255, 255)),
+              child: Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: Text(
+                  nome.trim(),
+                  style: TextStyle(
+                      fontFamily: 'Google',
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 5,
+            )
+          ],
+        ),
+      );
+    });
+    return Column(
+      children: lista,
+      crossAxisAlignment: CrossAxisAlignment.start,
+    );
   }
 }
