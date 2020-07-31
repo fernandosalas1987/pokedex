@@ -7,7 +7,6 @@ class PokemonProvider {
     final response = await http.get(
         'https://raw.githubusercontent.com/Biuni/PokemonGO-Pokedex/master/pokedex.json');
     final decodedData = json.decode(response.body);
-    //print(decodedData);
     final listPokemon = new Pokemons.fromJson(decodedData['pokemon']);
     return listPokemon.pokemons;
   }
