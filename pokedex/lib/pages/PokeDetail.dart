@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pokedex/models/PokeHelps.dart';
 import 'package:pokedex/models/Pokemon.dart';
 import 'package:pokedex/pages/HomePage.dart';
 
@@ -13,7 +14,7 @@ class PokeDetail extends StatefulWidget {
 class _PokeDetailState extends State<PokeDetail> {
   @override
   Widget build(BuildContext context) {
-    PokemonTypes types = new PokemonTypes();
+    PokemonDetailContent content = new PokemonDetailContent();
     return Scaffold(
       body: Stack(children: <Widget>[
         ClipPath(
@@ -65,61 +66,22 @@ class _PokeDetailState extends State<PokeDetail> {
               fit: BoxFit.contain,
             ),
             Container(
-              child: types.setTypes(widget.pokemon),
+              child: content.setTypes(widget.pokemon),
             ),
             SizedBox(height: 20.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Container(
-                    child: Column(
-                  children: <Widget>[
-                    Text(
-                      widget.pokemon.spawnTime,
-                      style: TextStyle(
-                          color: widget.pokemon.color,
-                          fontSize: 25.0,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Text('Spawn',
-                        style: TextStyle(
-                            color: widget.pokemon.color, fontSize: 19.0)),
-                  ],
-                )),
-                Container(
-                    child: Column(
-                  children: <Widget>[
-                    Text(
-                      widget.pokemon.height,
-                      style: TextStyle(
-                          color: widget.pokemon.color,
-                          fontSize: 25.0,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Text('Height',
-                        style: TextStyle(
-                          color: widget.pokemon.color,
-                          fontSize: 19.0,
-                        )),
-                  ],
-                )),
-                Container(
-                    child: Column(
-                  children: <Widget>[
-                    Text(
-                      widget.pokemon.weight,
-                      style: TextStyle(
-                          color: widget.pokemon.color,
-                          fontSize: 25.0,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Text('Weight',
-                        style: TextStyle(
-                            color: widget.pokemon.color, fontSize: 19.0)),
-                  ],
-                ))
-              ],
-            )
+            content
+                .firstRowDetail(widget.pokemon, ['Spaw', 'Height', 'Weight']),
+            SizedBox(
+              height: 20.0,
+            ),
+            Center(
+                child: Text('Weaknesses',
+                    style: TextStyle(
+                        color: widget.pokemon.color,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30.0))),
+            SizedBox(height: 20.0),
+            content.weaknesses(widget.pokemon)
           ],
         )
       ]),
@@ -143,7 +105,9 @@ class MyClipper extends CustomClipper<Path> {
   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
 
-class PokemonTypes {
+class PokemonDetailContent {
+  PokeHelps helps = new PokeHelps();
+
   Widget setTypes(Pokemon pokemon) {
     List<Widget> lista = [];
     pokemon.type.forEach((nome) {
@@ -169,5 +133,93 @@ class PokemonTypes {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.center,
     );
+  }
+
+  Widget setTextContent(
+      String text, Color color, FontWeight fontWeight, double size) {
+    return Text(text,
+        style: TextStyle(color: color, fontWeight: fontWeight, fontSize: size));
+  }
+
+  Widget firstRowDetail(Pokemon pokemon, List<String> headers) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        Container(
+            child: Column(
+          children: <Widget>[
+            setTextContent(
+                pokemon.spawnTime, pokemon.color, FontWeight.bold, 25.0),
+            setTextContent('Spawn', pokemon.color, FontWeight.bold, 19.0),
+          ],
+        )),
+        Container(
+            child: Column(
+          children: <Widget>[
+            setTextContent(
+                pokemon.height, pokemon.color, FontWeight.bold, 25.0),
+            setTextContent('Height', pokemon.color, FontWeight.bold, 19.0),
+          ],
+        )),
+        Container(
+            child: Column(
+          children: <Widget>[
+            setTextContent(
+                pokemon.weight, pokemon.color, FontWeight.bold, 25.0),
+            setTextContent('Weight', pokemon.color, FontWeight.bold, 19.0),
+          ],
+        ))
+      ],
+    );
+  }
+
+  Widget secondRowDetail(Pokemon pokemon, List<String> headers) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        Container(
+            child: Column(
+          children: <Widget>[
+            setTextContent(
+                pokemon.spawnTime, pokemon.color, FontWeight.bold, 25.0),
+            setTextContent('Spawn', pokemon.color, FontWeight.bold, 19.0),
+          ],
+        )),
+        Container(
+            child: Column(
+          children: <Widget>[
+            setTextContent(
+                pokemon.height, pokemon.color, FontWeight.bold, 25.0),
+            setTextContent('Height', pokemon.color, FontWeight.bold, 19.0),
+          ],
+        )),
+        Container(
+            child: Column(
+          children: <Widget>[
+            setTextContent(
+                pokemon.weight, pokemon.color, FontWeight.bold, 25.0),
+            setTextContent('Weight', pokemon.color, FontWeight.bold, 19.0),
+          ],
+        ))
+      ],
+    );
+  }
+
+  Widget weaknesses(Pokemon pokemon) {
+    List<Widget> list = [];
+    pokemon.weaknesses.forEach((weak) {
+      list.add(Container(
+        width: 80,
+        height: 30.0,
+        decoration: BoxDecoration(
+          color: helps.getColorPokemon(weak),
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        child: Center(
+            child: setTextContent(weak, Colors.white, FontWeight.bold, 20.0)),
+      ));
+    });
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: list);
   }
 }

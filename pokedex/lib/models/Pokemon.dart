@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pokedex/models/PokeHelps.dart';
 
 class Pokemons {
   List<Pokemon> pokemons = new List();
@@ -64,7 +65,7 @@ class Pokemon {
     weight = json['weight'];
     candy = json['candy'];
     candyCount = json['candy_count'];
-    egg = json['json'];
+    egg = json['egg'];
     spawnChance = json['spawn_chance'].toString();
     avgSpawns = json['avg_spawns'].toString();
     spawnTime = json['spawn_time'];
@@ -89,69 +90,8 @@ class Pokemon {
         type.add(types);
       });
     }
-    _getColorPokemon(type[0]);
-  }
-
-  _getColorPokemon(String type) {
-    switch (type) {
-      case 'Normal':
-        this.color = Colors.orange[200];
-        break;
-      case 'Fire':
-        this.color = Color.fromRGBO(250, 109, 110, 10);
-        break;
-      case 'Water':
-        this.color = Color.fromRGBO(116, 186, 248, 10.0);
-        break;
-      case 'Grass':
-        this.color = Color.fromRGBO(73, 208, 176, 40.0);
-        break;
-      case 'Electric':
-        this.color = Color.fromRGBO(248, 209, 108, 10.0);
-        break;
-      case 'Ice':
-        this.color = Colors.cyanAccent[400];
-        break;
-      case 'Fighting':
-        this.color = Colors.teal[200];
-        break;
-      case 'Poison':
-        this.color = Colors.purple[200];
-        break;
-      case 'Ground':
-        this.color = Colors.brown[200];
-        break;
-      case 'Flying':
-        this.color = Colors.indigo[200];
-        break;
-      case 'Psychic':
-        this.color = Colors.pink[200];
-        break;
-      case 'Bug':
-        this.color = Colors.lightGreen[300];
-        break;
-      case 'Rock':
-        this.color = Colors.grey;
-        break;
-      case 'Ghost':
-        this.color = Colors.indigo[300];
-        break;
-      case 'Dark':
-        this.color = Color.fromRGBO(177, 115, 109, 10.0);
-        break;
-      case 'Dragon':
-        this.color = Colors.indigo[800];
-        break;
-      case 'Steel':
-        this.color = Colors.blueGrey;
-        break;
-      case 'Fairy':
-        this.color = Colors.pinkAccent[100];
-        break;
-      default:
-        this.color = Colors.grey;
-        break;
-    }
+    PokeHelps help = new PokeHelps();
+    this.color = help.getColorPokemon(type[0]);
   }
 }
 
