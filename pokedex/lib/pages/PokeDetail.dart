@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex/models/PokeHelps.dart';
 import 'package:pokedex/models/Pokemon.dart';
-import 'package:pokedex/pages/HomePage.dart';
 
 class PokeDetail extends StatefulWidget {
   final Pokemon pokemon;
@@ -16,75 +15,70 @@ class _PokeDetailState extends State<PokeDetail> {
   Widget build(BuildContext context) {
     PokemonDetailContent content = new PokemonDetailContent();
     return Scaffold(
-      body: Stack(children: <Widget>[
-        ClipPath(
-          clipper: MyClipper(),
-          child: Container(
-            height: 300.0,
-            width: double.infinity,
-            color: widget.pokemon.color,
-          ),
-        ),
-        Column(
-          children: <Widget>[
-            SizedBox(
-              height: 60.0,
-            ),
-            Row(
-              children: <Widget>[
-                IconButton(
-                    icon: Icon(Icons.arrow_back_ios),
-                    color: Colors.white,
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) => HomePage()));
-                    }),
-                Text(
-                  'Pokedex',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20.0),
-                )
-              ],
-            ),
-            Container(
-                child: Text(
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            elevation: 0.0,
+            pinned: true,
+            backgroundColor: Colors.transparent,
+            expandedHeight: 280.0,
+            floating: true,
+            centerTitle: true,
+            title: Text(
               widget.pokemon.name,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30.0),
-            )),
-            FadeInImage.assetNetwork(
-              placeholder: 'assets/img/no-image.jpg',
-              image: widget.pokemon.img,
-              height: 200,
-              width: 200,
-              fit: BoxFit.contain,
+              style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
             ),
-            Container(
-              child: content.setTypes(widget.pokemon),
-            ),
-            SizedBox(height: 20.0),
-            content
-                .firstRowDetail(widget.pokemon, ['Spaw', 'Height', 'Weight']),
+            flexibleSpace: FlexibleSpaceBar(
+                background: Stack(children: <Widget>[
+              ClipPath(
+                clipper: MyClipper(),
+                child: Container(
+                  height: 280.0,
+                  width: double.infinity,
+                  color: widget.pokemon.color,
+                ),
+              ),
+              Column(children: <Widget>[
+                SizedBox(
+                  height: 15.0,
+                ),
+                Row(
+                  children: <Widget>[
+                    SizedBox(width: 40.0),
+                    Text(
+                      'Pokedex',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 30.0,
+                ),
+                Center(
+                  child: FadeInImage.assetNetwork(
+                    placeholder: 'assets/img/no-image.jpg',
+                    image: widget.pokemon.img,
+                    height: 200,
+                    width: 200,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ])
+            ])),
+          ),
+          SliverList(
+              delegate: SliverChildListDelegate([
             SizedBox(
-              height: 20.0,
+              height: 5.0,
             ),
-            Center(
-                child: Text('Weaknesses',
-                    style: TextStyle(
-                        color: widget.pokemon.color,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30.0))),
-            SizedBox(height: 20.0),
-            content.weaknesses(widget.pokemon)
-          ],
-        )
-      ]),
+            content.bodyDetail(widget.pokemon),
+            // content.bodyDetail(widget.pokemon)
+          ]))
+        ],
+      ),
     );
   }
 }
@@ -93,9 +87,10 @@ class MyClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     var path = Path();
-    path.lineTo(0, size.height - 50);
+
+    path.lineTo(0, size.height - 90);
     path.quadraticBezierTo(
-        size.width / 2, size.height, size.width, size.height - 50);
+        size.width / 2, size.height / 1.2, size.width, size.height - 90);
     path.lineTo(size.width, 0);
     path.close();
     return path;
@@ -113,7 +108,8 @@ class PokemonDetailContent {
     pokemon.type.forEach((nome) {
       lista.add(Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20), color: pokemon.color),
+            borderRadius: BorderRadius.circular(20),
+            color: helps.getColorPokemon(nome)),
         width: 100.0,
         height: 35.0,
         child: Center(
@@ -137,7 +133,7 @@ class PokemonDetailContent {
 
   Widget setTextContent(
       String text, Color color, FontWeight fontWeight, double size) {
-    return Text(text,
+    return Text(text != "null" ? text : '0',
         style: TextStyle(color: color, fontWeight: fontWeight, fontSize: size));
   }
 
@@ -148,25 +144,26 @@ class PokemonDetailContent {
         Container(
             child: Column(
           children: <Widget>[
-            setTextContent(
-                pokemon.spawnTime, pokemon.color, FontWeight.bold, 25.0),
-            setTextContent('Spawn', pokemon.color, FontWeight.bold, 19.0),
+            setTextContent(pokemon.num, pokemon.color, FontWeight.bold, 25.0),
+            setTextContent(headers[0], pokemon.color, FontWeight.bold, 19.0),
           ],
         )),
+        pokemonLine(pokemon),
         Container(
             child: Column(
           children: <Widget>[
             setTextContent(
                 pokemon.height, pokemon.color, FontWeight.bold, 25.0),
-            setTextContent('Height', pokemon.color, FontWeight.bold, 19.0),
+            setTextContent(headers[1], pokemon.color, FontWeight.bold, 19.0),
           ],
         )),
+        pokemonLine(pokemon),
         Container(
             child: Column(
           children: <Widget>[
             setTextContent(
                 pokemon.weight, pokemon.color, FontWeight.bold, 25.0),
-            setTextContent('Weight', pokemon.color, FontWeight.bold, 19.0),
+            setTextContent(headers[2], pokemon.color, FontWeight.bold, 19.0),
           ],
         ))
       ],
@@ -182,23 +179,24 @@ class PokemonDetailContent {
           children: <Widget>[
             setTextContent(
                 pokemon.spawnTime, pokemon.color, FontWeight.bold, 25.0),
-            setTextContent('Spawn', pokemon.color, FontWeight.bold, 19.0),
+            setTextContent(headers[0], pokemon.color, FontWeight.bold, 19.0),
           ],
         )),
+        pokemonLine(pokemon),
         Container(
             child: Column(
           children: <Widget>[
-            setTextContent(
-                pokemon.height, pokemon.color, FontWeight.bold, 25.0),
-            setTextContent('Height', pokemon.color, FontWeight.bold, 19.0),
+            setTextContent(pokemon.egg, pokemon.color, FontWeight.bold, 25.0),
+            setTextContent(headers[1], pokemon.color, FontWeight.bold, 19.0),
           ],
         )),
+        pokemonLine(pokemon),
         Container(
             child: Column(
           children: <Widget>[
-            setTextContent(
-                pokemon.weight, pokemon.color, FontWeight.bold, 25.0),
-            setTextContent('Weight', pokemon.color, FontWeight.bold, 19.0),
+            setTextContent(pokemon.candyCount.toString(), pokemon.color,
+                FontWeight.bold, 25.0),
+            setTextContent('Candy', pokemon.color, FontWeight.bold, 19.0),
           ],
         ))
       ],
@@ -219,7 +217,54 @@ class PokemonDetailContent {
             child: setTextContent(weak, Colors.white, FontWeight.bold, 20.0)),
       ));
     });
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: list);
+    return Wrap(
+        crossAxisAlignment: WrapCrossAlignment.center,
+        spacing: 20.0,
+        runSpacing: 20.0,
+        children: list);
+  }
+
+  Widget bodyDetail(Pokemon pokemon) {
+    List<Widget> list = [];
+    // list.add(SizedBox(height: 10.0));
+    list.add(
+      Container(
+        child: setTypes(pokemon),
+      ),
+    );
+
+    list.add(SizedBox(height: 20.0));
+
+    list.add(firstRowDetail(pokemon, ['Number', 'Height', 'Weight']));
+    list.add(SizedBox(height: 20.0));
+    list.add(secondRowDetail(pokemon, ['Spawn', 'Egg', 'Candy']));
+
+    list.add(SizedBox(
+      height: 20.0,
+    ));
+
+    list.add(
+      Center(
+          child: Text('Weaknesses',
+              style: TextStyle(
+                  color: pokemon.color,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30.0))),
+    );
+
+    list.add(SizedBox(height: 20.0));
+
+    list.add(weaknesses(pokemon));
+    list.add(Container(
+      padding: EdgeInsets.only(bottom: 20.0),
+    ));
+    return Column(children: list);
+  }
+
+  Widget pokemonLine(Pokemon pokemon) {
+    return SizedBox(
+        width: 3.0,
+        height: 40.0,
+        child: Container(width: 4.0, color: pokemon.color));
   }
 }

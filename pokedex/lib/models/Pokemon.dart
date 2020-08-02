@@ -59,7 +59,8 @@ class Pokemon {
     id = json['id'];
     num = json['num'];
     name = json['name'];
-    img = json['img'];
+    img =
+        'https://raw.githubusercontent.com/fanzeyi/pokemon.json/master/images/${this.num}.png';
 
     height = json['height'];
     weight = json['weight'];
