@@ -21,34 +21,34 @@ class Pokecard extends StatelessWidget {
           ),
           Stack(children: <Widget>[
             new Padding(
-              padding: EdgeInsets.fromLTRB(65.0, 0.0, 0.0, 0.0),
+              padding: EdgeInsets.fromLTRB(80.0, 0.0, 0.0, 0.0),
               child: Opacity(
                   opacity: 0.2,
                   child: Align(
                     alignment: Alignment.bottomRight,
                     child: Image.asset(
                       'assets/img/pokeball.png',
-                      height: 120,
-                      width: 100,
+                      height: 90,
+                      width: 80,
                       fit: BoxFit.contain,
                     ),
                   )),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(60.0, 0.0, 0.0, 0.0),
+              padding: const EdgeInsets.fromLTRB(80.0, 0.0, 0.0, 0.0),
               child: Align(
                 alignment: Alignment.bottomRight,
                 child: FadeInImage.assetNetwork(
                   placeholder: 'assets/img/no-image.jpg',
+                  height: 90,
+                  width: 80,
                   image: pokemon.img,
-                  height: 100,
-                  width: 100,
                   fit: BoxFit.contain,
                 ),
               ),
             ),
             Container(
-              padding: EdgeInsets.only(left: 10.0),
+              padding: EdgeInsets.only(left: 5.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
