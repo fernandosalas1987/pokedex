@@ -39,7 +39,7 @@ class Pokecard extends StatelessWidget {
               child: Align(
                 alignment: Alignment.bottomRight,
                 child: FadeInImage.assetNetwork(
-                  placeholder: 'assets/img/no-image.jpg',
+                  placeholder: 'assets/img/pokeball_red.png',
                   height: 90,
                   width: 80,
                   image: pokemon.img,

@@ -99,13 +99,13 @@ class Pokemon {
 class Evolution {
   String num;
   String name;
+  String img;
 
-  Evolution({
-    this.num,
-    this.name,
-  });
+  Evolution({this.num, this.name, this.img});
   Evolution.fromJson(Map<String, dynamic> json) {
     num = json['num'];
     name = json['name'];
+    img =
+        'https://raw.githubusercontent.com/fanzeyi/pokemon.json/master/images/${this.num}.png';
   }
 }

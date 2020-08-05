@@ -205,6 +205,7 @@ class PokemonDetailContent {
 
   Widget weaknesses(Pokemon pokemon) {
     List<Widget> list = [];
+
     pokemon.weaknesses.forEach((weak) {
       list.add(Container(
         width: 80,
@@ -226,21 +227,102 @@ class PokemonDetailContent {
 
   Widget bodyDetail(Pokemon pokemon) {
     List<Widget> list = [];
-    // list.add(SizedBox(height: 10.0));
+
+    List<Evolution> evolutions = [];
+    List<Widget> listEvolutions = [];
+    String evolution;
+    if (pokemon.nextEvolution == null && pokemon.prevEvolution == null) {
+      evolution = 'No Evolutions';
+    }
+
+    if (pokemon.nextEvolution != null && pokemon.prevEvolution == null) {
+      evolution = 'Evolutions';
+      evolutions = pokemon.nextEvolution;
+      evolutions.forEach((element) {
+        listEvolutions.add(Column(
+          children: <Widget>[
+            FadeInImage.assetNetwork(
+              placeholder: 'assets/img/pokeball_red.png',
+              height: 120,
+              width: 120,
+              image: element.img,
+              fit: BoxFit.contain,
+            ),
+            Text(element.name,
+                style: TextStyle(
+                    color: pokemon.color,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0))
+          ],
+        ));
+      });
+    }
+
+    if (pokemon.nextEvolution == null && pokemon.prevEvolution != null) {
+      evolution = 'Evolutions';
+      evolutions = pokemon.prevEvolution;
+      evolutions.forEach((element) {
+        listEvolutions.add(Column(
+          children: <Widget>[
+            FadeInImage.assetNetwork(
+              placeholder: 'assets/img/pokeball_red.png',
+              height: 90,
+              width: 80,
+              image: element.img,
+              fit: BoxFit.contain,
+            ),
+            Text(element.name,
+                style: TextStyle(
+                    color: pokemon.color,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0))
+          ],
+        ));
+      });
+    }
+
+    if (pokemon.nextEvolution != null && pokemon.prevEvolution != null) {
+      evolution = 'Evolutions';
+      pokemon.nextEvolution.forEach((element) {
+        evolutions.add(element);
+      });
+      pokemon.prevEvolution.forEach((element) {
+        evolutions.add(element);
+      });
+      evolutions.forEach((element) {
+        listEvolutions.add(Column(
+          children: <Widget>[
+            FadeInImage.assetNetwork(
+              placeholder: 'assets/img/pokeball_red.png',
+              height: 90,
+              width: 80,
+              image: element.img,
+              fit: BoxFit.contain,
+            ),
+            Text(element.name,
+                style: TextStyle(
+                    color: pokemon.color,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25.0))
+          ],
+        ));
+      });
+    }
+
     list.add(
       Container(
         child: setTypes(pokemon),
       ),
     );
 
-    list.add(SizedBox(height: 20.0));
+    list.add(SizedBox(height: 10.0));
 
     list.add(firstRowDetail(pokemon, ['Number', 'Height', 'Weight']));
     list.add(SizedBox(height: 20.0));
     list.add(secondRowDetail(pokemon, ['Spawn', 'Egg', 'Candy']));
 
     list.add(SizedBox(
-      height: 20.0,
+      height: 10.0,
     ));
 
     list.add(
@@ -258,6 +340,23 @@ class PokemonDetailContent {
     list.add(Container(
       padding: EdgeInsets.only(bottom: 20.0),
     ));
+
+    list.add(
+      Center(
+          child: Text(evolution,
+              style: TextStyle(
+                  color: pokemon.color,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30.0))),
+    );
+
+    list.add(Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: listEvolutions,
+    ));
+
+    list.add(SizedBox(height: 5.0));
+
     return Column(children: list);
   }
 
